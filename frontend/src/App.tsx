@@ -169,6 +169,7 @@ export class App extends React.Component<any, State> {
         />
         <div>{queueItems}</div>
         <div>{rooms}</div>
+        <div><a href="https://github.com/micahriggan/watchthis">github</a></div>
       </div>
     );
   }
