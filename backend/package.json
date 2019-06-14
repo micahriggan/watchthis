@@ -7,6 +7,7 @@
     "clean": "rm -rf ts_build",
     "compile": "npm run clean && npx tsc",
     "start": "npm run compile && node ts_build/index.js",
+    "start:key": "YT_SECRET=$(cat ../secret) npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
