@@ -94,6 +94,7 @@ IO.on("connect", client => {
     }
   });
   const skipVotes = {};
+  const deleteVotes = {};
   client.on("skip", channel => {
     if (!skipVotes[channel]) {
       skipVotes[channel] = {};
@@ -105,6 +106,23 @@ IO.on("connect", client => {
     ) {
       skipVotes[channel] = {};
       startQueueItem(channel, channels[channel].nowPlaying + 1);
+    }
+  });
+
+  client.on("delete", channel => {
+    if (!skipVotes[channel]) {
+      deleteVotes[channel] = {};
+    }
+    deleteVotes[channel][client.id] = true;
+    if (
+      Object.keys(deleteVotes[channel]).length >=
+      IO.sockets.in(channel).clients.length
+    ) {
+      deleteVotes[channel] = {};
+      const nowPlaying = channels[channel].nowPlaying;
+      channels[channel].q.splice(nowPlaying, 1);
+      startQueueItem(channel, nowPlaying);
+      IO.sockets.in(channel).emit("deleted", nowPlaying);
     }
   });
 });

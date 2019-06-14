@@ -44,6 +44,10 @@ export class App extends React.Component<any, State> {
         console.log(this.state.queue);
         this.setQueue(this.state.queue.concat([queueItem]));
       });
+
+      client.on("deleted", (index: number) => {
+        this.fetchQueue();
+      });
     });
     this.fetchQueue();
     this.fetchRooms();
@@ -105,11 +109,16 @@ export class App extends React.Component<any, State> {
 
   joinRoom() {
     this.fetchQueue();
+    this.fetchRooms();
     client.emit("join", this.state.roomName);
   }
 
   skip() {
     client.emit("skip", this.state.roomName);
+  }
+
+  delete() {
+    client.emit("delete", this.state.roomName);
   }
 
   handleReady(yt: any) {
@@ -151,6 +160,7 @@ export class App extends React.Component<any, State> {
         </div>
         <div>
           <button onClick={e => this.skip()}>skip</button>
+          <button onClick={e => this.delete()}>delete</button>
         </div>
         <YouTube
           videoId={this.state.videoId}
