@@ -110,7 +110,7 @@ IO.on("connect", client => {
   });
 
   client.on("delete", channel => {
-    if (!skipVotes[channel]) {
+    if (!deleteVotes[channel]) {
       deleteVotes[channel] = {};
     }
     deleteVotes[channel][client.id] = true;
